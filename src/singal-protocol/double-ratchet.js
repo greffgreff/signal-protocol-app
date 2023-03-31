@@ -1,5 +1,4 @@
-const crypto = require("crypto");
-const { sharedKey } = require("../client./singal-protocol/x3dh");
+import crypto from "crypto";
 
 function encrypt(plaintext, key) {
   const cipher = crypto.createCipher("aes-256-cbc", key);
@@ -65,4 +64,4 @@ class DoubleRatchet {
   }
 }
 
-module.exports = { DoubleRatchet };
+export { DoubleRatchet };

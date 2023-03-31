@@ -1,5 +1,5 @@
-const crypto = require("crypto");
-const { v4: uuid } = require("uuid");
+import crypto from "crypto";
+import { v4 as uuid } from "uuid";
 
 class X3DH {
   constructor({ identityKeys, signedPreKeys, oneTimePreKeys, outstandingExchanges }) {
@@ -104,4 +104,4 @@ class X3DH {
   }
 }
 
-module.exports = { X3DH };
+export { X3DH };
