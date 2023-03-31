@@ -1,19 +1,19 @@
-import crypto from "crypto";
+import { createHash, createCipher, createDecipher } from "crypto-browserify";
 
 function encrypt(plaintext, key) {
-  const cipher = crypto.createCipher("aes-256-cbc", key);
+  const cipher = createCipher("aes-256-cbc", key);
   let ciphertext = cipher.update(plaintext, "utf8", "hex");
   return (ciphertext += cipher.final("hex"));
 }
 
 function decrypt(ciphertext, key) {
-  const decipher = crypto.createDecipher("aes-256-cbc", key);
+  const decipher = createDecipher("aes-256-cbc", key);
   let plaintext = decipher.update(ciphertext, "hex", "utf8");
   return (plaintext += decipher.final("utf8"));
 }
 
 function kdf(input) {
-  return crypto.createHash("sha256").update(input).digest("hex");
+  return createHash("sha256").update(input).digest("hex");
 }
 
 class Ratchet {

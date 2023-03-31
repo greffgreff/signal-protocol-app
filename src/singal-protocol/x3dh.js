@@ -1,9 +1,9 @@
-import crypto from "crypto";
+import { createECDH, createHash } from "crypto-browserify";
 import { v4 as uuid } from "uuid";
 
 class X3DH {
   constructor({ identityKeys, signedPreKeys, oneTimePreKeys, outstandingExchanges }) {
-    this.ecdh = crypto.createECDH("secp256k1");
+    this.ecdh = createECDH("secp256k1");
     this.identityKeys = identityKeys;
     this.signedPreKeys = signedPreKeys;
     this.oneTimePreKeys = oneTimePreKeys;
@@ -19,7 +19,7 @@ class X3DH {
   }
 
   static generateKeyPairs() {
-    const ecdh = crypto.createECDH("secp256k1");
+    const ecdh = createECDH("secp256k1");
     ecdh.generateKeys();
     return {
       privateKey: ecdh.getPrivateKey("hex"),
@@ -46,7 +46,7 @@ class X3DH {
     // Combine computed secrets of exchanges
     const combinedKeys = Buffer.concat([DH1, DH2, DH3, DH4]);
     // Compute the secret of the shared secrets
-    const sharedSecret = crypto.createHash("sha256").update(combinedKeys).digest("hex");
+    const sharedSecret = createHash("sha256").update(combinedKeys).digest("hex");
     return {
       id,
       identityKey: this.identityKeys.publicKey,
@@ -68,7 +68,7 @@ class X3DH {
     // Combine computed secrets of exchanges
     const combinedKeys = Buffer.concat([DH1, DH2, DH3, DH4]);
     // Compute the secret of the shared secrets
-    const sharedSecret = crypto.createHash("sha256").update(combinedKeys).digest("hex");
+    const sharedSecret = createHash("sha256").update(combinedKeys).digest("hex");
     return { sharedSecret };
   }
 
@@ -94,8 +94,7 @@ class X3DH {
   }
 
   static secretToReadable(sharedSecret) {
-    return crypto
-      .createHash("sha256")
+    return createHash("sha256")
       .update(sharedSecret)
       .digest("hex")
       .match(/.{1,4}/g)
