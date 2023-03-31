@@ -3,7 +3,7 @@ const http = require("http");
 
 const server = http.createServer((req, rep) => {});
 
-server.listen(3000, () => console.log(`Server is listening on port ${3000}`));
+server.listen(4030, () => console.log(`Server is listening on port ${4030}`));
 const wsServer = new webSocketServer({ httpServer: server });
 
 const clients = [];
