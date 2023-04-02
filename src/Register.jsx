@@ -14,7 +14,7 @@ export default function Register({ onRegister }) {
   return (
     <div className="register-wrapper">
       <h1>Register</h1>
-      <input placeholder="Enter a username" ref={input} />
+      <input type="text" placeholder="Enter a username" ref={input} />
       <input type="button" value="Register" onClick={handlerClick} />
     </div>
   );

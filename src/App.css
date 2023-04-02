@@ -27,6 +27,10 @@ body {
   margin-bottom: 20px;
 }
 
+.register-wrapper input[type="text"] {
+  background-color: whitesmoke;
+}
+
 .chat-wrapper {
   width: 40%;
   height: 70%;
