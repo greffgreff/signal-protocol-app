@@ -12,7 +12,7 @@ const MAX_USERS = 10;
 const chatUsers = [];
 
 ws.on("request", req => {
-  if (chatUsers.length <= MAX_USERS) {
+  if (chatUsers.length >= MAX_USERS) {
     console.log("Max user count reached", MAX_USERS, "Will no longer accept incoming connections.");
     return;
   }
@@ -27,20 +27,20 @@ ws.on("request", req => {
     if (!exchanges.some(ex => ex.username === chatUsers[i].username)) {
       exchanges.push({
         username: chatUsers[i].username,
-        bundle: chatUsers[i].bundles.shift(),
+        bundle: chatUsers[i].bundles?.shift(),
       });
     }
   }
   console.log("Sending key bundles to user", exchanges);
   client.send(JSON.stringify({ type: "exchanges", exchanges }));
 
-  client.on("message", data => {
-    const packet = JSON.parse(data);
-    console.log("Received", data);
+  client.on("message", message => {
+    const packet = JSON.parse(message.utf8Data);
+    console.log("Received", packet);
 
     switch (packet.type) {
       // When a user connects, he sends key bundles to be sent to other users
-      case "bundle":
+      case "bundles":
         chatUsers.push({
           client: client,
           username: packet.user,

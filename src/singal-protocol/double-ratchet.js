@@ -19,6 +19,7 @@ function kdf(input) {
 class Ratchet {
   constructor(key) {
     this.state = key;
+    this.next = this.next.bind(this);
   }
 
   next(prevChainKey = "") {
@@ -40,12 +41,16 @@ class DoubleRatchet {
       this.receivingRatchet = new Ratchet(this.rootRatchet.next().chainKey);
       this.sendingRatchet = new Ratchet(this.rootRatchet.next().chainKey);
     }
+
+    this.rotateSendingRatchet = this.rotateSendingRatchet.bind(this);
+    this.rotateReceivingRatchet = this.rotateReceivingRatchet.bind(this);
+    this.send = this.send.bind(this);
+    this.receive = this.receive.bind(this);
   }
 
   rotateSendingRatchet(chainKey) {
     this.sendingRatchet = new Ratchet(this.rootRatchet.next(chainKey).chainKey);
   }
-
   rotateReceivingRatchet(chainKey) {
     this.receivingRatchet = new Ratchet(this.rootRatchet.next(chainKey).chainKey);
   }

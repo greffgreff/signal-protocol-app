@@ -9,6 +9,10 @@ class X3DH {
     this.oneTimePreKeys = oneTimePreKeys;
     this.signature = null; // TODO create sig
     this.outstandingExchanges = outstandingExchanges;
+
+    this.generateKeyBundle = this.generateKeyBundle.bind(this);
+    this.exchange = this.exchange.bind(this);
+    this.postExchange = this.postExchange.bind(this);
   }
 
   static createDefault(numOneTimePreKeys = 10) {
@@ -33,6 +37,7 @@ class X3DH {
   }
 
   exchange({ id, signedPreKey, identityKey, oneTimePreKey, signature }) {
+    console.log("Exchange with", { id, signedPreKey, identityKey, oneTimePreKey, signature });
     // TODO verify signature beforehand
     const ephemeralKeys = X3DH.generateKeyPairs();
     // DH1 = DH(IK, SPK)
@@ -56,6 +61,7 @@ class X3DH {
   }
 
   postExchange({ id, identityKey, ephemeralKey }) {
+    console.log("Post exchanging with", { id, identityKey, ephemeralKey });
     // DH1 = DH(SPK, IK)
     const DH1 = this.diffieHellman(this.signedPreKeys.privateKey, identityKey);
     // DH2 = DH(IK, EK)

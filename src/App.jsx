@@ -28,14 +28,17 @@ export default function App() {
       console.log("WebSocket connection established!");
       console.log("Sending key bundles to the server...");
       // Immediately sends MAX_USERSs key bundle for MAX_USERS potential users
-      ws.send({
-        type: "bundles",
-        user: username,
-        bunbles: new Array(MAX_USERS).fill(null).map(x3dh.generateKeyBundle),
-      });
+      ws.send(
+        JSON.stringify({
+          type: "bundles",
+          user: username,
+          bundles: new Array(MAX_USERS).fill(null).map(x3dh.generateKeyBundle),
+        })
+      );
     };
 
-    ws.onmessage = packet => {
+    ws.onmessage = message => {
+      const packet = JSON.parse(message.data);
       console.log("Received message of type", packet.type, packet);
       switch (packet.type) {
         // Called when a simple `chat` message arrives from the server
@@ -55,7 +58,7 @@ export default function App() {
           // Perform key exchange foreach users already in chat and create double ratchet for each of them
           // A post bundle key containing the ephemeral key is then send to server to dispatch to target user
           // to complete the exchange cycle and create a double ratchet
-          packet.exchanges.foreach(exchange => {
+          packet.exchanges.map(exchange => {
             const { sharedSecret, id, identityKey, ephemeralKey } = x3dh.exchange(exchange.bundle);
             ws.send({ type: "post-exchange", to: exchange.username, postBundle: { id, identityKey, ephemeralKey } });
             const doubleRatchet = new DoubleRatchet(sharedSecret, true);
