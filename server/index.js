@@ -1,68 +1,73 @@
-const webSocketServer = require("websocket").server;
+const Websocket = require("websocket").server;
 const http = require("http");
 
 const server = http.createServer((req, rep) => {});
 
 server.listen(4030, () => console.log(`Server is listening on port ${4030}`));
 
-const ws = new webSocketServer({ httpServer: server });
+const ws = new Websocket({ httpServer: server });
 
 const MAX_USERS = 10;
 
-const chatUsers = [];
+const connections = [];
 
 ws.on("request", req => {
-  if (chatUsers.length >= MAX_USERS) {
-    console.log("Max user count reached", MAX_USERS, "Will no longer accept incoming connections.");
+  if (connections.length >= MAX_USERS) {
+    console.log("Max user count of", MAX_USERS, "reached. Will no longer accept incoming connections.");
     return;
   }
-
   const client = req.accept(null, req.origin);
   console.log("Client accepted.");
 
   // Upon connecting to the chat, the user should be sent key
   // bundles from all connected users in the chat
   const exchanges = [];
-  for (let i = 0; i < chatUsers.length; i++) {
-    if (!exchanges.some(ex => ex.username === chatUsers[i].username)) {
+  for (let i = 0; i < connections.length; i++) {
+    // If user not already accounted for
+    if (!exchanges.some(ex => ex.user.id === connections[i].user.id)) {
       exchanges.push({
-        username: chatUsers[i].username,
-        bundle: chatUsers[i].bundles?.shift(),
+        user: connections[i].user,
+        bundle: connections[i].bundles?.shift(),
       });
     }
   }
-  console.log("Sending key bundles to user", exchanges);
   client.send(JSON.stringify({ type: "exchanges", exchanges }));
+  console.log("Sent key bundles to user.");
 
   client.on("message", message => {
+    if (message.type !== "utf8") return;
+
     const packet = JSON.parse(message.utf8Data);
-    console.log("Received", packet);
+    console.log("Received message of type", packet.type);
 
     switch (packet.type) {
-      // When a user connects, he sends key bundles to be sent to other users
+      // When a user connects, he sends key bundles to be sent to other users later
+      // when they connect
       case "bundles":
-        chatUsers.push({
+        const newConnection = {
           client: client,
-          username: packet.user,
+          user: packet.user,
           bundles: packet.bundles,
-        });
-        break;
-      // Users independently encrypt messages for each users. Messages from a
-      // sender must therefore be dispatched only to receiver in question for decryption
-      case "chat":
-        chatUsers.forEach(user => {
-          if (packet.to == user.username) {
-            user.client.send(packet);
-          }
-        });
+        };
+        connections.push(newConnection);
         break;
       // Called when a user wishes to finalise an exchange with another user.
       // The post bundle from the sender must be redirected to user in question.
       case "post-exchange":
-        for (let user in chatUsers) {
-          if (user.username === packet.to) {
-            user.client.send(packet);
+        for (let connection of connections) {
+          if (connection.user.id === packet.to.id) {
+            connection.client.send(JSON.stringify(packet));
             break;
+          }
+        }
+        break;
+      // Users independently encrypt messages for each user. Messages from a
+      // sender must therefore be dispatched only to receiver in question for decryption
+      case "chat":
+        console.log("Passing encrypted message", packet);
+        for (let connection of connections) {
+          if (packet.to.id == connection.user.id) {
+            connection.client.send(JSON.stringify(packet));
           }
         }
         break;

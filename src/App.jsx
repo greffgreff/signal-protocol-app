@@ -9,45 +9,56 @@ import { DoubleRatchet } from "./singal-protocol/double-ratchet";
 const MAX_USERS = 10;
 const CHAT_SERVER = "ws://localhost:4030";
 
+const doubleRatchets = [];
+
+console.log("Reloaded...", doubleRatchets);
+
 export default function App() {
   const [ws, setWs] = useState();
-  const [username, setUsername] = useState();
+  const [user, setUser] = useState();
   const [messages, setMessages] = useState([]);
-  const [x3dh, setX3DH] = useState();
-  const [doubleRatchets, setDoubleRatchets] = useState([]);
 
   useEffect(() => {
-    if (!username) return;
+    if (!user) return;
+
+    const ws = new WebSocket(CHAT_SERVER);
 
     // Create X3DH instance for user to eventually perform key exchanges
     const x3dh = X3DH.createDefault(MAX_USERS);
 
-    const ws = new WebSocket(CHAT_SERVER);
-
     ws.onopen = () => {
       console.log("WebSocket connection established!");
-      console.log("Sending key bundles to the server...");
+
       // Immediately sends MAX_USERSs key bundle for MAX_USERS potential users
-      ws.send(
-        JSON.stringify({
-          type: "bundles",
-          user: username,
-          bundles: new Array(MAX_USERS).fill(null).map(x3dh.generateKeyBundle),
-        })
-      );
+      const bundles = {
+        type: "bundles",
+        user: user,
+        bundles: new Array(MAX_USERS).fill(null).map(x3dh.generateKeyBundle),
+      };
+
+      ws.send(JSON.stringify(bundles));
     };
 
     ws.onmessage = message => {
       const packet = JSON.parse(message.data);
-      console.log("Received message of type", packet.type, packet);
+      console.log("Received message of type", packet.type);
+
       switch (packet.type) {
         // Called when a simple `chat` message arrives from the server
         case "chat":
           // Find double ratchet for user and decipher message
           for (let ratchet of doubleRatchets) {
-            if (ratchet.username === packet.from) {
+            if (ratchet.user.id === packet.from.id) {
               const plaintext = ratchet.doubleRatchet.receive(packet.text);
-              const message = { id: packet.id, username: packet.from, text: plaintext, date: packet.date };
+
+              const message = {
+                id: packet.id,
+                user: packet.from,
+                text: plaintext,
+                date: packet.date,
+              };
+              console.log("Decryted message", message);
+
               setMessages([...messages, message]);
               break;
             }
@@ -60,18 +71,36 @@ export default function App() {
           // to complete the exchange cycle and create a double ratchet
           packet.exchanges.map(exchange => {
             const { sharedSecret, id, identityKey, ephemeralKey } = x3dh.exchange(exchange.bundle);
-            ws.send({ type: "post-exchange", to: exchange.username, postBundle: { id, identityKey, ephemeralKey } });
-            const doubleRatchet = new DoubleRatchet(sharedSecret, true);
-            setDoubleRatchets([...doubleRatchets, { username: exchange.username, doubleRatchet }]);
+
+            const postExchange = {
+              type: "post-exchange",
+              to: exchange.user,
+              from: user,
+              postBundle: { id, identityKey, ephemeralKey },
+            };
+
+            ws.send(JSON.stringify(postExchange));
+
+            doubleRatchets.push({
+              user: exchange.user,
+              doubleRatchet: new DoubleRatchet(sharedSecret, true),
+            });
+
+            console.log("SHARED SECRET", sharedSecret, "WITH USER", exchange.user.username);
           });
           break;
         // Called when a user joins the chat, to establish E2E encryption with user
         case "post-exchange":
           // Find sharedSecret for a given user bundle and instanciate new double ratchet for given user
           // Users for which double ratchet is created should already have a double ratchet of their own
-          const sharedSecret = x3dh.postExchange(packet.postBundle);
-          const doubleRatchet = new DoubleRatchet(sharedSecret);
-          setDoubleRatchets([...doubleRatchets, { username: packet.username, doubleRatchet }]);
+          const { sharedSecret } = x3dh.postExchange(packet.postBundle);
+
+          doubleRatchets.push({
+            user: packet.from,
+            doubleRatchet: new DoubleRatchet(sharedSecret),
+          });
+
+          console.log("SHARED SECRET", sharedSecret, "WITH USER", packet.from.username);
           break;
         default:
           console.log("Did not handle packet:", packet);
@@ -80,23 +109,31 @@ export default function App() {
     };
 
     setWs(ws);
-    setX3DH(x3dh);
-  }, [username]);
+  }, [user]);
 
   // On message send, compute ciphertext independently for each users in the chat
   function handleChat(text) {
-    const message = { id: uuid(), username, text, date: new Date() };
-    setMessages([...messages, message]);
+    const localMessage = {
+      id: uuid(),
+      user,
+      text: { plaintext: text, ciphertext: null },
+      date: new Date(),
+    };
+    setMessages([...messages, localMessage]);
 
-    // Computer and send message with cipher text for server to dispatch to target user
+    // Compute and send message with cipher text for server to dispatch to target user
     doubleRatchets.forEach(ratchet => {
-      message.text = ratchet.doubleRatchet.send(text);
-      message.type = "chat";
-      message.to = ratchet.username;
-      message.from = username;
-      ws.send(JSON.stringify(message));
+      const remoteMessage = {
+        id: localMessage.id,
+        type: "chat",
+        text: ratchet.doubleRatchet.send(text),
+        to: ratchet.user,
+        from: user,
+        date: localMessage.date,
+      };
+      ws.send(JSON.stringify(remoteMessage));
     });
   }
 
-  return <div>{!username ? <Register onRegister={setUsername} /> : <Chat messages={messages} onChat={handleChat} />}</div>;
+  return <div>{!user ? <Register onRegister={setUser} /> : <Chat messages={messages} onChat={handleChat} />}</div>;
 }

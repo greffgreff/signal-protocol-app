@@ -19,7 +19,7 @@ export default function Chat({ messages, onChat }) {
       <div className="chat">
         {messages.map(m => (
           <div key={m.id} className="chat-bubble">
-            <b>{m.username}</b>&ensp;{m.text}
+            <b>{m.user.username}</b>&ensp;{m.text.plaintext}
           </div>
         ))}
         <div ref={bottom} />

@@ -9,7 +9,7 @@ body {
 }
 
 .register-wrapper {
-  width: 20%;
+  width: 400px;
   height: 40%;
   position: absolute;
   top: 50%;
@@ -32,7 +32,7 @@ body {
 }
 
 .chat-wrapper {
-  width: 40%;
+  width: 400px;
   height: 70%;
   position: absolute;
   top: 50%;
