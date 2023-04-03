@@ -69,7 +69,7 @@ export default function App() {
           // Perform key exchange foreach users already in chat and create double ratchet for each of them
           // A post bundle key containing the ephemeral key is then send to server to dispatch to target user
           // to complete the exchange cycle and create a double ratchet
-          packet.exchanges.map(exchange => {
+          for (let exchange of packet.exchanges) {
             const { sharedSecret, id, identityKey, ephemeralKey } = x3dh.exchange(exchange.bundle);
 
             const postExchange = {
@@ -86,8 +86,8 @@ export default function App() {
               doubleRatchet: new DoubleRatchet(sharedSecret, true),
             });
 
-            console.log("SHARED SECRET", sharedSecret, "WITH USER", exchange.user.username);
-          });
+            console.log("ESTABLISHED SHARED SECRET", sharedSecret, "WITH USER", exchange.user.username);
+          }
           break;
         // Called when a user joins the chat, to establish E2E encryption with user
         case "post-exchange":
@@ -100,7 +100,7 @@ export default function App() {
             doubleRatchet: new DoubleRatchet(sharedSecret),
           });
 
-          console.log("SHARED SECRET", sharedSecret, "WITH USER", packet.from.username);
+          console.log("ESTABLISHED SHARED SECRET", sharedSecret, "WITH USER", packet.from.username);
           break;
         default:
           console.log("Did not handle packet:", packet);
