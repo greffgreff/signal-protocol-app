@@ -11,8 +11,6 @@ const CHAT_SERVER = "ws://localhost:4030";
 
 const doubleRatchets = [];
 
-console.log("Reloaded...", doubleRatchets);
-
 export default function App() {
   const [ws, setWs] = useState();
   const [user, setUser] = useState();
