@@ -69,6 +69,7 @@ input:focus {
 .chat-bubble {
   margin: 10px;
   animation: chat 0.2s ease-out forwards;
+  overflow-wrap: break-word;
 }
 
 @keyframes chat {

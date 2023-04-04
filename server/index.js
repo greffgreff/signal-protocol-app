@@ -1,9 +1,21 @@
 const Websocket = require("websocket").server;
 const http = require("http");
+const os = require('os');
+
+const interfaces = os.networkInterfaces();
+let ip = ""
+for (const interface in interfaces) {
+  for (const iface of interfaces[interface]) {
+    if (iface.family === 'IPv4' && !iface.internal) {
+      ip = iface.address;
+      break;
+    }
+  }
+}
 
 const server = http.createServer((req, rep) => {});
 
-server.listen(4030, () => console.log(`Server is listening on port ${4030}`));
+server.listen(4030, ip, () => console.log(`Server is listening on port ${4030}`));
 
 const ws = new Websocket({ httpServer: server });
 
