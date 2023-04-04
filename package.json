@@ -62,7 +62,7 @@
     "crypto": false
   },
   "scripts": {
-    "start": "PORT=3001 node scripts/start.js & PORT=3002 node scripts/start.js",
+    "start": "scripts/start.js",
     "build": "node scripts/build.js",
     "server": "node ./server"
   },

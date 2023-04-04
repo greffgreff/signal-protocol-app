@@ -34,6 +34,8 @@ class Ratchet {
 class DoubleRatchet {
   constructor(rootKey, isInitiator = false) {
     this.rootRatchet = new Ratchet(rootKey);
+    this.messageCounter = 0;
+    this.latestMessageDate = new Date();
     if (isInitiator) {
       this.sendingRatchet = new Ratchet(this.rootRatchet.next().chainKey);
       this.receivingRatchet = new Ratchet(this.rootRatchet.next().chainKey);
@@ -51,21 +53,41 @@ class DoubleRatchet {
   rotateSendingRatchet(chainKey) {
     this.sendingRatchet = new Ratchet(this.rootRatchet.next(chainKey).chainKey);
   }
+
   rotateReceivingRatchet(chainKey) {
     this.receivingRatchet = new Ratchet(this.rootRatchet.next(chainKey).chainKey);
   }
 
-  send(message) {
+  send(plaintext) {
     const { chainKey, messageKey } = this.sendingRatchet.next();
     this.rotateSendingRatchet(chainKey);
-    const ciphertext = encrypt(message, messageKey);
-    return ciphertext;
+    const ciphertext = encrypt(plaintext, messageKey);
+    this.messageCounter++;
+    this.latestMessageDate = new Date();
+    return {
+      header: {
+        counter: this.messageCounter,
+        date: this.latestMessageDate,
+      },
+      ciphertext,
+    };
   }
 
-  receive(ciphertext) {
+  receive({ header: { counter, date }, ciphertext }) {
+    if (counter <= this.messageCounter) return;
+    if (date <= this.latestMessageDate) return;
     const { chainKey, messageKey } = this.receivingRatchet.next();
     this.rotateReceivingRatchet(chainKey);
-    return { plaintext: decrypt(ciphertext, messageKey), ciphertext };
+    const plaintext = decrypt(ciphertext, messageKey);
+    this.messageCounter++;
+    return {
+      header: {
+        counter,
+        date,
+      },
+      plaintext,
+      ciphertext,
+    };
   }
 }
 

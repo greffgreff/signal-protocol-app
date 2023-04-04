@@ -48,12 +48,12 @@ export default function App() {
           // Find double ratchet for user and decipher message
           for (let ratchet of doubleRatchets) {
             if (ratchet.user.id === packet.from.id) {
-              const plaintext = ratchet.doubleRatchet.receive(packet.text);
+              const { plaintext, ciphertext } = ratchet.doubleRatchet.receive(packet.text);
 
               const message = {
                 id: packet.id,
                 user: packet.from,
-                text: plaintext,
+                text: { plaintext, ciphertext },
                 date: packet.date,
               };
               console.log("Decryted message", message);
@@ -124,12 +124,12 @@ export default function App() {
           // Find double ratchet for user and decipher message
           for (let ratchet of doubleRatchets) {
             if (ratchet.user.id === packet.from.id) {
-              const plaintext = ratchet.doubleRatchet.receive(packet.text);
+              const { plaintext, ciphertext } = ratchet.doubleRatchet.receive(packet.text);
 
               const message = {
                 id: packet.id,
                 user: packet.from,
-                text: plaintext,
+                text: { plaintext, ciphertext },
                 date: packet.date,
               };
               console.log("Decryted message", message);

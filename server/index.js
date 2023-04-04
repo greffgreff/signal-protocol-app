@@ -15,7 +15,7 @@ for (const interface in interfaces) {
 
 const server = http.createServer((req, rep) => {});
 
-server.listen(4030, ip, () => console.log(`Server is listening on port ${4030}`));
+server.listen(4030, () => console.log(`Server is listening on port ${4030}`));
 
 const ws = new Websocket({ httpServer: server });
 

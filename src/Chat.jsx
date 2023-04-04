@@ -20,6 +20,7 @@ export default function Chat({ messages, onChat }) {
       <div className="chat">
         {messages.map(m => (
           <div key={m.id} className="chat-bubble">
+            {console.log(m)}
             <b>{!m.text.ciphertext ? "me" : m.user.username}</b> &ensp; {showCiphtertext ? m.text.ciphertext : m.text.plaintext}
           </div>
         ))}
