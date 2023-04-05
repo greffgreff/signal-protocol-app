@@ -20,10 +20,9 @@ export default function App() {
   useEffect(() => {
     if (!user) return;
 
-    const ws = new WebSocket(CHAT_SERVER);
-
-    // Create X3DH instance for user to eventually perform key exchanges
     const x3dh = X3DH.createDefault(MAX_USERS);
+
+    const ws = new WebSocket(CHAT_SERVER);
 
     ws.onopen = () => {
       console.log("WebSocket connection established!");
@@ -182,6 +181,8 @@ export default function App() {
           break;
       }
     };
+
+    setWs(ws);
   }, [messages]);
 
   // On message send, compute ciphertext independently for each users in the chat
