@@ -84,8 +84,8 @@ Upon running `npm run start_all`, both a react client and the websocket server a
 <br />
 
 <div style="display:flex">
-    <img src="https://user-images.githubusercontent.com/56337726/230773109-e7d56258-7b0a-40ae-a69a-3c73a421237d.jpg" width="50%">
-    <img src="https://user-images.githubusercontent.com/56337726/230773111-df68560c-d360-4556-8beb-8392b89af6b7.jpg" width="50%">
+    <img src="https://user-images.githubusercontent.com/56337726/230773109-e7d56258-7b0a-40ae-a69a-3c73a421237d.jpg" width="47%">
+    <img src="https://user-images.githubusercontent.com/56337726/230773111-df68560c-d360-4556-8beb-8392b89af6b7.jpg" width="47%">
 </div>
 
 Images displaying two react clients, Bob and Alice, with both plain and encrypted messages. The messages transfered over the network through the server look like the following. Note the lack of ledgible messages (from the node console):
