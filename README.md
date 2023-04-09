@@ -104,7 +104,7 @@ Images displaying two react clients, Bob and Alice, with both plain and encrypte
 And on Bob's side, the computed for Alice was (as seen the debug console in the browser):
 ![Screenshot 2023-04-09 at 11 24 07 am](https://user-images.githubusercontent.com/56337726/230773888-32f721df-621e-4d3c-9cbd-3748076386b3.jpg)
 And vice versa on Alice's side:
-![Screenshot 2023-04-09 at 11 23 59 am](https://user-images.githubusercontent.com/56337726/230773909-b1e4a80d-6bd4-46ff-9b37-8c47b836796b.jpg)
+![Screenshot 2023-04-09 at 11 24 07 am](https://user-images.githubusercontent.com/56337726/230774318-054af8e6-798f-473b-a36f-ee832afa4c24.jpg)
 
 ## Works cited
 
