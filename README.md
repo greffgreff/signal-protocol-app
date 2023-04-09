@@ -45,7 +45,9 @@ Where SK is a shared key that the other party (Bob) should be able to derive on 
 
 Visually, the following exchanges happen:
 
-![X3DH](https://user-images.githubusercontent.com/56337726/230773137-80a5d31a-6e5a-4cda-8bf6-264657b10127.png)
+<div style="display:flex">
+    <img src="https://user-images.githubusercontent.com/56337726/230773137-80a5d31a-6e5a-4cda-8bf6-264657b10127.png" width="400px">
+</div>
 
 After calculating SK, Alice deletes her ephemeral private key and the DH outputs. She then send a post-exchange key bundle to the server that Bob can retrieve at a later date to establish an identical SK. The post-exchange key bundle contains:
 
@@ -68,7 +70,6 @@ Note that a DH key pair exchanges (ex: `DH2 = DH(IK, EK)`) on their own do not m
 ### Double Ratchet
 
 Once a SK has been established between two parties, various ratchets can be put in place to generate an encryption key for cihpering and deciphering messages between said parties.
-
 
 ## Implementation
 
