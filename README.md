@@ -71,7 +71,9 @@ Note that a DH key pair exchanges (ex: `DH2 = DH(IK, EK)`) on their own do not m
 
 ### Double Ratchet
 
-Once a SK has been established between two parties, various ratchets can be put in place to generate an encryption key for cihpering and deciphering messages between said parties.
+The Double Ratchet algorithm is used by two parties to exchange encrypted messages based on a shared secret key. After performed a X3DH to agree on the shared secret key, the parties will use the Double Ratchet to send and receive encrypted messages.
+
+The parties derive new keys for every "Double Ratchet" message so that earlier keys cannot be calculated from later ones. The parties also send Diffie-Hellman public values attached to their messages. The results of Diffie-Hellman calculations are mixed into the derived keys so that later keys cannot be calculated from earlier ones. These properties gives some protection to earlier or later encrypted messages in case of a compromise of a party's keys.
 
 ## Implementation
 
