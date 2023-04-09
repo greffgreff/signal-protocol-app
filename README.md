@@ -91,8 +91,8 @@ Images displaying two react clients, Bob and Alice, with both plain and encrypte
     header: { counter: 4, date: '2023-04-09T09:22:28.328Z' },
     ciphertext: 'd2ab4f3fa40574866e3f789cb50423004ab23ea45487ab4e9a82776cda5c5872bce54038ef4a8e34ac7d9a41a1dd7ecd'
   },
-  to: { id: '496a9e00-bfeb-4d43-87d0-105a6a34e8f1', username: 'Bob' },
-  from: { id: 'ebc44f87-f289-4498-898f-056fa3470178', username: 'Alice' },
+  to: { id: '496a9e00-bfeb-4d43-87d0-105a6a34e8f1' },
+  from: { id: 'ebc44f87-f289-4498-898f-056fa3470178' },
   date: '2023-04-09T09:22:28.324Z'
 }
 ```
