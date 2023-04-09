@@ -97,7 +97,7 @@ Upon running `npm run start_all`, both a react client and the websocket server a
 
 > You can also expose both the client and the server to a local network by following the simple instructions [here](https://github.com/greffgreff/signal-protocol-app/blob/master/server/index.js#L10) and [here](https://github.com/greffgreff/signal-protocol-app/blob/master/src/App.jsx#L12).
 
-The actual Singal Protocol-related code and be found [here](https://github.com/greffgreff/signal-protocol-app/tree/master/src/singal-protocol)
+The actual Signal Protocol-related code and be found [here](https://github.com/greffgreff/signal-protocol-app/tree/master/src/signal-protocol)
 
 Images displaying two react clients, Bob and Alice, with both plain and encrypted messages.
 <br />
@@ -131,7 +131,7 @@ And vice versa on Alice's side:
 
 [signal specification of the x3dh](https://signal.org/docs/specifications/x3dh/)
 
-[singal specification of the double ratchet](https://signal.org/docs/specifications/doubleratchet/)
+[signal specification of the double ratchet](https://signal.org/docs/specifications/doubleratchet/)
 
 [python implementation](https://nfil.dev/coding/encryption/python/double-ratchet-example/)
 
