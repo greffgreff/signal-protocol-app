@@ -3,8 +3,8 @@ import Chat from "./Chat";
 import React, { useEffect, useState } from "react";
 import Register from "./Register";
 import { v4 as uuid } from "uuid";
-import { X3DH } from "./singal-protocol/x3dh";
-import { DoubleRatchet } from "./singal-protocol/double-ratchet";
+import { X3DH } from "./signal-protocol/x3dh";
+import { DoubleRatchet } from "./signal-protocol/double-ratchet";
 
 const MAX_USERS = 10;
 const CHAT_SERVER = "ws://localhost:4030";
