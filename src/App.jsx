@@ -8,6 +8,8 @@ import { DoubleRatchet } from "./signal-protocol/double-ratchet";
 
 const MAX_USERS = 10;
 const CHAT_SERVER = "ws://localhost:4030";
+// Uncomment and change <IP> to the ip address of the running server to use of the network.
+// const CHAT_SERVER = "ws://<IP>:4030";
 
 const doubleRatchets = [];
 
