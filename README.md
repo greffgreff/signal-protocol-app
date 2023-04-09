@@ -2,17 +2,6 @@
 
 The Signal Protocol is a cryptographic protocol that provides end-to-end encryption for instant messaging and voice calls. This repository houses a simple node project to demonstrate how the Signal Protocol could be implemented. As per the actual specification / setup of the Signal Procotol, this project has both a ReactJS client and a simple server that connects to the clients via a websocket for message transfers.
 
-Upon running `npm run start_all`, both a react client and the websocket server are spun up on `http://localhost:3000` and `ws://localhost:4030` respectively. To connect multiple clients, simply duplicate the browser tab or create a new tab with `http://localhost:3000`. You can connect up to a hardcoded 10 clients simultaneously, though, the encryption could work for an unlimited number of users.
-
-> You can also expose both the client and the server to a local network by following the simple instructions [here](https://github.com/greffgreff/signal-protocol-app/blob/master/server/index.js#L10) and [here](https://github.com/greffgreff/signal-protocol-app/blob/master/src/App.jsx#L12).
-
-<div style="display:flex">
-    <img src="https://user-images.githubusercontent.com/56337726/230773109-e7d56258-7b0a-40ae-a69a-3c73a421237d.jpg" width="500px">
-    <img src="https://user-images.githubusercontent.com/56337726/230773111-df68560c-d360-4556-8beb-8392b89af6b7.jpg" width="500px">
-</div>
-
-Images displaying two react clients, Bob and Alice, with both plain and encrypted messages that were received by the server.
-
 ## What is it the Signal Protocol?
 
 When you use a messaging app that supports the Signal Protocol, your messages are encrypted on your device before they are sent. This means that only the intended recipient can decrypt and read the message, and nobody else, including the app developer or the server that the message passes through, can access the content of the message.
@@ -83,7 +72,16 @@ Once a SK has been established between two parties, various ratchets can be put 
 
 ## Implementation
 
-### Message passed through the server
+Upon running `npm run start_all`, both a react client and the websocket server are spun up on `http://localhost:3000` and `ws://localhost:4030` respectively. To connect multiple clients, simply duplicate the browser tab or create a new tab with `http://localhost:3000`. You can connect up to a hardcoded 10 clients simultaneously, though, the encryption could work for an unlimited number of users.
+
+> You can also expose both the client and the server to a local network by following the simple instructions [here](https://github.com/greffgreff/signal-protocol-app/blob/master/server/index.js#L10) and [here](https://github.com/greffgreff/signal-protocol-app/blob/master/src/App.jsx#L12).
+
+<div style="display:flex">
+    <img src="https://user-images.githubusercontent.com/56337726/230773109-e7d56258-7b0a-40ae-a69a-3c73a421237d.jpg" width="500px">
+    <img src="https://user-images.githubusercontent.com/56337726/230773111-df68560c-d360-4556-8beb-8392b89af6b7.jpg" width="500px">
+</div>
+
+Images displaying two react clients, Bob and Alice, with both plain and encrypted messages. The messages transfered over the network through the server look like the following. Note the lack of ledgible messages.
 ```
 {
   id: 'e306992c-335e-41db-a934-c13fbdd97a93',
