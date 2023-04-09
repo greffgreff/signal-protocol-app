@@ -74,6 +74,20 @@ Note that a DH key pair exchanges (ex: `DH2 = DH(IK, EK)`) on their own do not m
 The Double Ratchet algorithm is used by two parties to exchange encrypted messages based on a shared secret key. After performed a X3DH to agree on the shared secret key, the parties will use the Double Ratchet to send and receive encrypted messages.
 
 The parties derive new keys for every "Double Ratchet" message so that earlier keys cannot be calculated from later ones. The parties also send Diffie-Hellman public values attached to their messages. The results of Diffie-Hellman calculations are mixed into the derived keys so that later keys cannot be calculated from earlier ones. These properties gives some protection to earlier or later encrypted messages in case of a compromise of a party's keys.
+The Double Ratchet uses two types of keys: root keys and chain keys. Root keys are long-term keys used to derive new chain keys, while chain keys are used to encrypt and decrypt messages.
+
+To start a session, two parties should have computed an identical share secret known as the root keys in the Double Ratchet mechanism. Each party then derives two chain keys: a sending chain key and a receiving chain key. The sending chain key is used to encrypt messages sent by the party, while the receiving chain key is used to decrypt messages received by the party.
+
+As messages are sent and received, the chain keys are updated. Each time a message is sent, the sending chain key is updated, and a new chain key is derived from the root key. Similarly, each time a message is received, the receiving chain key is updated, and a new chain key is derived from the root key. This ensures that if an attacker is able to compromise one chain key, they cannot compromise the entire session, as the next chain key has already been derived from the root key.
+
+Visually, a ratchet looks like the following:
+
+<img src="https://signal.org/docs/specifications/doubleratchet/Set0_1.png" width="50%" />
+
+Where the message key is used to encrypt or decrypt text (or any other piece of data for that matter) respectively for the sending and receiving ratchets.  
+The Double Ratchet also includes a message counter and a timestamp, which are included in the message header. This ensures that messages are delivered in order and that an attacker cannot replay an old message.
+
+By deriving new chain keys from the root key, the Double Ratchet provides forward secrecy and protects against compromise of previous chain keys. The message counter and timestamp ensure that messages are delivered in order and prevent replay attacks.
 
 ## Implementation
 
