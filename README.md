@@ -6,8 +6,10 @@ Upon running `npm run start_all`, both a react client and the websocket server a
 
 > You can also expose both the client and the server to a local network by following the simple instructions [here](https://github.com/greffgreff/signal-protocol-app/blob/master/server/index.js#L10) and [here](https://github.com/greffgreff/signal-protocol-app/blob/master/src/App.jsx#L12).
 
-![Screenshot 2023-04-09 at 11 22 50 am](https://user-images.githubusercontent.com/56337726/230773109-e7d56258-7b0a-40ae-a69a-3c73a421237d.jpg)
-![Screenshot 2023-04-09 at 11 22 56 am](https://user-images.githubusercontent.com/56337726/230773111-df68560c-d360-4556-8beb-8392b89af6b7.jpg)
+<div style="display:flex">
+    <img src="https://user-images.githubusercontent.com/56337726/230773109-e7d56258-7b0a-40ae-a69a-3c73a421237d.jpg" width="500px">
+    <img src="https://user-images.githubusercontent.com/56337726/230773111-df68560c-d360-4556-8beb-8392b89af6b7.jpg" width="500px">
+</div>
 
 ## What is it the Signal Protocol?
 
