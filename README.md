@@ -77,12 +77,15 @@ Upon running `npm run start_all`, both a react client and the websocket server a
 
 > You can also expose both the client and the server to a local network by following the simple instructions [here](https://github.com/greffgreff/signal-protocol-app/blob/master/server/index.js#L10) and [here](https://github.com/greffgreff/signal-protocol-app/blob/master/src/App.jsx#L12).
 
+<br />
+
 <div style="display:flex">
     <img src="https://user-images.githubusercontent.com/56337726/230773109-e7d56258-7b0a-40ae-a69a-3c73a421237d.jpg" width="500px">
     <img src="https://user-images.githubusercontent.com/56337726/230773111-df68560c-d360-4556-8beb-8392b89af6b7.jpg" width="500px">
 </div>
 
-Images displaying two react clients, Bob and Alice, with both plain and encrypted messages. The messages transfered over the network through the server look like the following. Note the lack of ledgible messages.
+Images displaying two react clients, Bob and Alice, with both plain and encrypted messages. The messages transfered over the network through the server look like the following. Note the lack of ledgible messages (from the node console):
+
 ```
 {
   id: 'e306992c-335e-41db-a934-c13fbdd97a93',
@@ -95,6 +98,11 @@ Images displaying two react clients, Bob and Alice, with both plain and encrypte
   from: { id: 'ebc44f87-f289-4498-898f-056fa3470178' }
 }
 ```
+
+And on Bob's side, the computed for Alice was (as seen the debug console in the browser):
+![Screenshot 2023-04-09 at 11 24 07 am](https://user-images.githubusercontent.com/56337726/230773888-32f721df-621e-4d3c-9cbd-3748076386b3.jpg)
+And vice versa on Alice's side:
+![Screenshot 2023-04-09 at 11 23 59 am](https://user-images.githubusercontent.com/56337726/230773909-b1e4a80d-6bd4-46ff-9b37-8c47b836796b.jpg)
 
 ## Works cited
 
