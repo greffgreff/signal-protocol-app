@@ -1,14 +1,15 @@
 # Singal Protocol Sample App
 
-## Overview
-
 The Signal Protocol is a cryptographic protocol that provides end-to-end encryption for instant messaging and voice calls. This repository houses a simple node project to demonstrate how the Signal Protocol could be implemented. As per the actual specification / setup of the Signal Procotol, this project has both a ReactJS client and a simple server that connects to the clients via a websocket for message transfers.
 
 Upon running `npm run start_all`, both a react client and the websocket server are spun up on `http://localhost:3000` and `ws://localhost:4030` respectively. 
 
 > You can also expose both the client and the server to a local network by following the simple instructions [here](https://github.com/greffgreff/signal-protocol-app/blob/master/server/index.js#L10) and [here](https://github.com/greffgreff/signal-protocol-app/blob/master/src/App.jsx#L12).
 
-# What is it the Signal Protocol?
+![Screenshot 2023-04-09 at 11 22 50 am](https://user-images.githubusercontent.com/56337726/230773109-e7d56258-7b0a-40ae-a69a-3c73a421237d.jpg)
+![Screenshot 2023-04-09 at 11 22 56 am](https://user-images.githubusercontent.com/56337726/230773111-df68560c-d360-4556-8beb-8392b89af6b7.jpg)
+
+## What is it the Signal Protocol?
 
 When you use a messaging app that supports the Signal Protocol, your messages are encrypted on your device before they are sent. This means that only the intended recipient can decrypt and read the message, and nobody else, including the app developer or the server that the message passes through, can access the content of the message.
 
@@ -16,7 +17,7 @@ The Signal Protocol uses a combination of symmetric and asymmetric encryption to
 
 The Signal Protocol also provides features like forward secrecy and deniability. Forward secrecy means that even if an attacker were to obtain the encryption keys, they would not be able to decrypt previously sent messages. Deniability means that it is impossible to prove that a particular message was sent by a particular person, which can be useful in situations where privacy is important. To achieve this, the protocol uses a mechanism known as the Double Ratchet mechanism.
 
-# X3DH
+### X3DH
 
 The Extended Triple Diffie-Hellman (or X3DH) algorithm is used to establish the initial shared secret key between two users, Alice and Bob, based on their public keys and using a server. Bob has already published some information on a server and Alice wants to establish a shared secret key with Bob in order to send him an encrypted message, while Bob is not online. Alice must therefore be able to perform the key exchange using simply the information stored on the server. The server can also be used to store messages by either of them until the other one can retrieve them.
 
@@ -51,7 +52,7 @@ Where SK is a shared key that the other party (Bob) should be able to derive on 
 
 Visually, the following exchanges happen:
 
-(https://signal.org/docs/specifications/x3dh/X3DH.png)
+![X3DH](https://user-images.githubusercontent.com/56337726/230773137-80a5d31a-6e5a-4cda-8bf6-264657b10127.png)
 
 After calculating SK, Alice deletes her ephemeral private key and the DH outputs. She then send a post-exchange key bundle to the server that Bob can retrieve at a later date to establish an identical SK. The post-exchange key bundle contains:
 
@@ -71,7 +72,7 @@ And like Alice computes a SK like so:
 
 Note that a DH key pair exchanges (ex: `DH2 = DH(IK, EK)`) on their own do not mean anything. It is the combined set of results from DH key exchanges of various keys that provides security. For instance, the key exchange with the IK of both parties provides 'mutual authentication'. Should the IK of one party by forged or replaced by an outsider, the resulting shared secret will not match and encryption won't be established
 
-# Double Ratchet
+### Double Ratchet
 
 Once a SK has been established between two parties, various ratchets can be put in place to generate an encryption key for cihpering and deciphering messages between said parties.
 
