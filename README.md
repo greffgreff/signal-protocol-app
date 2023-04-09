@@ -18,11 +18,63 @@ The Signal Protocol also provides features like forward secrecy and deniability.
 
 # X3DH
 
-[x3dh](https://signal.org/docs/specifications/x3dh/)
+The Extended Triple Diffie-Hellman (or X3DH) algorithm is used to establish the initial shared secret key between two users, Alice and Bob, based on their public keys and using a server. Bob has already published some information on a server and Alice wants to establish a shared secret key with Bob in order to send him an encrypted message, while Bob is not online. Alice must therefore be able to perform the key exchange using simply the information stored on the server. The server can also be used to store messages by either of them until the other one can retrieve them.
+
+To perform an X3DH key agreement with Bob, Alice contacts the server and fetches a "prekey bundle" containing the following values:
+
+    Bob's public identity key IKB
+    Bob's signed prekey SPKB
+    Bob's prekey signature Sig(IKB, Encode(SPKB))
+    Bob's one-time prekey OPKB
+    
+The server should provide one of Bob's one-time prekeys if one exists, and then delete it. If all of Bob's one-time prekeys on the server have been deleted, the bundle will not contain a one-time prekey.
+
+Alice verifies the prekey signature and aborts the protocol if verification fails. Alice then generates an ephemeral key pair with public key EKA.
+
+If the bundle does not contain a one-time prekey, she calculates:
+
+    DH1 = DH(IKA, SPKB)
+    DH2 = DH(EKA, IKB)
+    DH3 = DH(EKA, SPKB)
+    SK = KDF(DH1 || DH2 || DH3)
+
+Where the KDF is a cryptographic function used to derive one or more secret keys from a shared secret or a master key. In our case, the KDF is a simple hashing function that uses the SHA-256 algorithm.
+
+If the bundle does contain a one-time prekey, the calculation is modified to include an additional DH:
+
+    DH4 = DH(EKA, OPKB)
+    SK = KDF(DH1 || DH2 || DH3 || DH4)
+
+Where SK is a shared key that the other party (Bob) should be able to derive on his end without Alice telling/sending it to him.
+
+> Note that this sample application does not handle missing one-time prekey in the prekey bundle as described above. The server expects a one-time prekey in each bundle sent by users, in this case, Bob.
+
+Visually, the following exchanges happen:
+
+(https://signal.org/docs/specifications/x3dh/X3DH.png)
+
+After calculating SK, Alice deletes her ephemeral private key and the DH outputs. She then send a post-exchange key bundle to the server that Bob can retrieve at a later date to establish an identical SK. The post-exchange key bundle contains:
+
+    Alice's public identity key IKA
+    Alice's generated public ephemeral key EKA
+
+After retreiving the post key bundle, Bob calculates the following:
+
+    DH1 = DH(SPK, IK)
+    DH2 = DH(IK, EK)
+    DH3 = DH(SPK, EK)
+    DH4 = DH(OPK, EK)
+    
+And like Alice computes a SK like so:
+
+    SK = KDF(DH1 || DH2 || DH3 || DH4)
+
+Note that a DH key pair exchanges (ex: `DH2 = DH(IK, EK)`) on their own do not mean anything. It is the combined set of results from DH key exchanges of various keys that provides security. For instance, the key exchange with the IK of both parties provides 'mutual authentication'. Should the IK of one party by forged or replaced by an outsider, the resulting shared secret will not match and encryption won't be established
 
 # Double Ratchet
 
-[double ratchet](https://signal.org/docs/specifications/doubleratchet/)
+Once a SK has been established between two parties, various ratchets can be put in place to generate an encryption key for cihpering and deciphering messages between said parties.
+
 
 ## Implementation
 
@@ -43,4 +95,12 @@ The Signal Protocol also provides features like forward secrecy and deniability.
 }
 ```
 
+## Works cited
 
+[signal specification of the x3dh](https://signal.org/docs/specifications/x3dh/)
+
+[singal specification of the double ratchet](https://signal.org/docs/specifications/doubleratchet/)
+
+[python implementation](https://nfil.dev/coding/encryption/python/double-ratchet-example/)
+
+[protocol as implemented by whatsapp](https://www.dinosec.com/docs/WhatsApp_E2E_Encryption_2019_SANS-DinoSec-RaulSiles_v1.0.pdf)
