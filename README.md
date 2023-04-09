@@ -1,70 +1,46 @@
-# Getting Started with Create React App
+# Singal Protocol Sample App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+The Signal Protocol is a cryptographic protocol that provides end-to-end encryption for instant messaging and voice calls. This repository houses a simple node project to demonstrate how the Signal Protocol could be implemented. As per the actual specification / setup of the Signal Procotol, this project has both a ReactJS client and a simple server that connects to the clients via a websocket for message transfers.
 
-In the project directory, you can run:
+Upon running `npm run start_all`, both a react client and the websocket server are spun up on `http://localhost:3000` and `ws://localhost:4030` respectively. 
 
-### `npm start`
+> You can also expose both the client and the server to a local network by following the simple instructions [here](https://github.com/greffgreff/signal-protocol-app/blob/master/server/index.js#L10) and [here](https://github.com/greffgreff/signal-protocol-app/blob/master/src/App.jsx#L12).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# What is it the Signal Protocol?
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+When you use a messaging app that supports the Signal Protocol, your messages are encrypted on your device before they are sent. This means that only the intended recipient can decrypt and read the message, and nobody else, including the app developer or the server that the message passes through, can access the content of the message.
 
-### `npm test`
+The Signal Protocol uses a combination of symmetric and asymmetric encryption to achieve this level of security. When you start a conversation with someone, your device generates a set of keys that are used to encrypt and decrypt the messages. These keys are shared securely between the devices of the participants in the conversation. This mechanism is know as The Extended Triple Key Exchange Protocol or X3DH for short.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The Signal Protocol also provides features like forward secrecy and deniability. Forward secrecy means that even if an attacker were to obtain the encryption keys, they would not be able to decrypt previously sent messages. Deniability means that it is impossible to prove that a particular message was sent by a particular person, which can be useful in situations where privacy is important. To achieve this, the protocol uses a mechanism known as the Double Ratchet mechanism.
 
-### `npm run build`
+# X3DH
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+[x3dh](https://signal.org/docs/specifications/x3dh/)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Double Ratchet
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+[double ratchet](https://signal.org/docs/specifications/doubleratchet/)
 
-### `npm run eject`
+## Implementation
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Clients
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Message passed through the server
+```
+{
+  id: 'e306992c-335e-41db-a934-c13fbdd97a93',
+  type: 'chat',
+  text: {
+    header: { counter: 4, date: '2023-04-09T09:22:28.328Z' },
+    ciphertext: 'd2ab4f3fa40574866e3f789cb50423004ab23ea45487ab4e9a82776cda5c5872bce54038ef4a8e34ac7d9a41a1dd7ecd'
+  },
+  to: { id: '496a9e00-bfeb-4d43-87d0-105a6a34e8f1', username: 'Bob' },
+  from: { id: 'ebc44f87-f289-4498-898f-056fa3470178', username: 'Alice' },
+  date: '2023-04-09T09:22:28.324Z'
+}
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
