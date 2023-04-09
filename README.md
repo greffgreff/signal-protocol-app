@@ -10,7 +10,7 @@ The Signal Protocol uses a combination of symmetric and asymmetric encryption to
 
 The Signal Protocol also provides features like forward secrecy and deniability. Forward secrecy means that even if an attacker were to obtain the encryption keys, they would not be able to decrypt previously sent messages. Deniability means that it is impossible to prove that a particular message was sent by a particular person, which can be useful in situations where privacy is important. To achieve this, the protocol uses a mechanism known as the Double Ratchet mechanism.
 
-The protocol relies heavily on what is known as the Diffie Hellman key exchange (DH for short) where a private key from one party is used to compute a  shared secret using the public key of another remote party. Likewise, the remote party computes the another secret using his private key and the other's public key. The resulting secrets should be identical, hence the term 'shared secret'. The advange of a DH key exchange is to establish a shared secret or 'password' between two parties without ever sharing it over a network. 
+The protocol relies heavily on what is known as the Diffie Hellman key exchange (DH for short) where a private key from one party is used to compute a  shared secret using the public key of another remote party. Likewise, the remote party computes another secret using his private key and the other's public key. The resulting secrets should be identical, hence the term 'shared secret'. The advange of a DH key exchange is to establish a shared secret or 'password' between two parties without ever sharing it over a network. 
 
 ### X3DH
 
