@@ -5,6 +5,10 @@ const server = http.createServer((req, rep) => {});
 
 server.listen(4030, () => console.log(`Server is listening on port ${4030}`));
 
+// Uncomment name replace <LAN IP> to the lan ip address of the device currently running the server
+// (ex: "192.168.0.101") to expose server to the lan network 
+// server.listen(4030, <LAN IP>, () => console.log(`Server is listening on port ${4030}`));
+
 const ws = new Websocket({ httpServer: server });
 
 const MAX_USERS = 10;
