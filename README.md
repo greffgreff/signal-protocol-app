@@ -97,7 +97,7 @@ Upon running `npm run start_all`, both a react client and the websocket server a
 
 > You can also expose both the client and the server to a local network by following the simple instructions [here](https://github.com/greffgreff/signal-protocol-app/blob/master/server/index.js#L10) and [here](https://github.com/greffgreff/signal-protocol-app/blob/master/src/App.jsx#L12).
 
-The actual Signal Protocol-related code and be found [here](https://github.com/greffgreff/signal-protocol-app/tree/master/src/signal-protocol)
+The actual Signal Protocol-related code can be found [here](https://github.com/greffgreff/signal-protocol-app/tree/master/src/signal-protocol).
 
 Images displaying two react clients, Bob and Alice, with both plain and encrypted messages.
 <br />
@@ -107,7 +107,7 @@ Images displaying two react clients, Bob and Alice, with both plain and encrypte
     <img src="https://user-images.githubusercontent.com/56337726/230773111-df68560c-d360-4556-8beb-8392b89af6b7.jpg" width="47%">
 </div>
 
-The messages transfered over the network through the server look like the following. Note the lack of ledgible messages (from the node console):
+The messages transfered over the network through the server look like the following (from the node console). Note the lack of ledgible messages:
 
 ```
 {
